@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const https = require('https');
+require('dotenv').config();
+
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
@@ -21,6 +23,19 @@ app.post("/",  function(req, res) {
     const lastName = req.body.lastName;
     const emailID = req.body.emailId;
 
+    const api_key = process.env.API_KEY;
+    const list_id = process.env.LIST_ID;
+
+    const url = "https://us7.api.mailchimp.com/3.0/lists/"+list_id ;
+    const auth_string = "chitreshD:"+ api_key;
+    
+    
+    
+    const options = {
+        method : "POST",
+        auth : auth_string
+    };
+
     const dataObj = {
         members : [ 
             {
@@ -36,13 +51,8 @@ app.post("/",  function(req, res) {
     } ;
 
     const jsonData =  JSON.stringify(dataObj);
-
-    const url = "https://us7.api.mailchimp.com/3.0/lists/643cb86805" ;
-
-    const options = {
-        method : "POST",
-        auth : "chitreshD:cebde0b96613d9adee1ded4f5bc95b98-us7"
-    };
+    
+    
 
     const request = https.request(url, options, function(response) {
         const statusCode = response.statusCode;
@@ -69,6 +79,7 @@ app.post("/failure", function(req, res) {
 //can listen on a dynamic port given by the hosting service or our local machine port
 app.listen( process.env.PORT || 3000 , function(){
     console.log("Server is running on port 3000");
+    
 })
 
 
@@ -77,8 +88,3 @@ app.listen( process.env.PORT || 3000 , function(){
 
 
 
-//list id
-//643cb86805
-
-// API Keys
-// cebde0b96613d9adee1ded4f5bc95b98-us7

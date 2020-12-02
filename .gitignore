@@ -1,0 +1,5 @@
+#dotenv environment var files
+.env 
+
+#dependencies
+node_modules/
